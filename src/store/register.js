@@ -1,8 +1,11 @@
 const getDefaultState = () => {
   return {
+    name: '',
     email: '',
     password: '',
-    showPassword: false
+    repeatPassword: '',
+    showPassword: false,
+    showRepeatPassword: false
   }
 }
 
@@ -10,6 +13,9 @@ export default {
   state: getDefaultState(),
   actions: {},
   mutations: {
+    setName(state, name) {
+      state.name = name
+    },
     setEmail(state, email) {
       state.email = email
     },
@@ -18,6 +24,12 @@ export default {
     },
     setShowPassword(state, showPassword) {
       state.showPassword = showPassword
+    },
+    setRepeatPassword(state, repeatPassword) {
+      state.repeatPassword = repeatPassword
+    },
+    setShowRepeatPassword(state, showRepeatPassword) {
+      state.showRepeatPassword = showRepeatPassword
     },
     resetState(state) {
       Object.assign(state, getDefaultState())

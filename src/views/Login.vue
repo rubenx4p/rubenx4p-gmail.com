@@ -1,27 +1,49 @@
 <template>
   <v-form>
     <v-container fluid>
-      <v-row>
-        <v-col cols="12" sm="6">
-          <v-text-field v-model="email" :rules="[rules.validEmail]" type="email" label="Email"></v-text-field>
-        </v-col>
-        <v-col cols="12" sm="6">
+      <v-row justify="center">
+        <v-col class="col-sm-5">
           <v-text-field
-            v-model="password"
-            :append-icon="true ? 'mdi-eye' : 'mdi-eye-off'"
-            :rules="[rules.required, rules.min, rules.max]"
-            :type="showPassword ? 'text' : 'password'"
-            name="input-10-1"
-            label="Normal with hint text"
-            hint="At least 8 characters"
-            counter
-            @click:append="showPassword = !showPassword"
+            v-model="email"
+            :error-messages="emailErrors"
+            required
+            type="email"
+            label="Email"
+            @input="$v.email.$touch()"
+            @blur="$v.email.$touch()"
           ></v-text-field>
         </v-col>
       </v-row>
-      <v-row>
-        <v-col cols="12" sm="12">
-          <v-btn color="primary" @click="submit">submit</v-btn>
+      <v-row justify="center">
+        <v-col class="col-sm-5">
+          <v-text-field
+            v-model="password"
+            :error-messages="passwordErrors"
+            :append-icon="true ? 'mdi-eye' : 'mdi-eye-off'"
+            required
+            :type="showPassword ? 'text' : 'password'"
+            label="Password"
+            @click:append="showPassword = !showPassword"
+            @input="$v.password.$touch()"
+            @blur="$v.password.$touch()"
+          ></v-text-field>
+        </v-col>
+      </v-row>
+      <v-row justify="center">
+        <v-col class="col-sm-5">
+          <v-btn color="primary" @click="login">Login</v-btn>
+        </v-col>
+      </v-row>
+      <v-row justify="center">
+        <v-col class="col-sm-5">
+          <v-row>
+            <v-col class="">
+              <router-link to="/foo">Forgot your password</router-link>
+            </v-col>
+            <v-col class="">
+              <router-link to="/register">Register</router-link>
+            </v-col>
+          </v-row>
         </v-col>
       </v-row>
     </v-container>
@@ -30,28 +52,30 @@
 
 <script>
 // import { mapState } from 'vuex'
+import { validationMixin } from 'vuelidate'
+import { required, email, minLength } from 'vuelidate/lib/validators'
 export default {
   name: 'login',
-  components: {},
-  data() {
-    return {
-      rules: {
-        required: value => !!value || 'Required.',
-        min: v => v.length >= 8 || 'Min 8 characters',
-        max: v => v.length <= 16 || 'Max 16 characters',
-        validEmail: v => this.validEmail(v) || 'Inccorect'
-      }
+  created() {
+    this.$store.commit('login/resetState')
+  },
+  mixins: [validationMixin],
+  validations: {
+    email: {
+      required,
+      email
+    },
+    password: {
+      minLength: minLength(8),
+      required
     }
   },
   methods: {
-    validEmail: email => {
-      console.log('asdfsdf')
-      // eslint-disable-next-line
-      var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/
-      return re.test(email)
-    },
-    submit: () => {
-      console.log('submit')
+    login() {
+      this.$v.$touch()
+      if (!this.$v.$error) {
+        console.log('submit')
+      }
     }
   },
   computed: {
@@ -78,6 +102,20 @@ export default {
       set(value) {
         this.$store.commit('login/setShowPassword', value)
       }
+    },
+    emailErrors() {
+      const errors = []
+      if (!this.$v.email.$dirty) return errors
+      !this.$v.email.email && errors.push('Must be valid e-mail')
+      !this.$v.email.required && errors.push('E-mail is required')
+      return errors
+    },
+    passwordErrors() {
+      const errors = []
+      if (!this.$v.password.$dirty) return errors
+      !this.$v.password.minLength && errors.push('Password must be at least 8 characters')
+      !this.$v.password.required && errors.push('Password is required')
+      return errors
     }
   }
 }
