@@ -32,10 +32,11 @@
           <v-text-field
             v-model="password"
             :error-messages="passwordErrors"
-            :append-icon="true ? 'mdi-eye' : 'mdi-eye-off'"
+            :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
             required
             :type="showPassword ? 'text' : 'password'"
             label="Password"
+            hint="This password will be the key for retriving all your account passwords"
             @click:append="showPassword = !showPassword"
             @input="$v.password.$touch()"
             @blur="$v.password.$touch()"
@@ -47,7 +48,7 @@
           <v-text-field
             v-model="repeatPassword"
             :error-messages="repeatPasswordErrors"
-            :append-icon="true ? 'mdi-eye' : 'mdi-eye-off'"
+            :append-icon="showRepeatPassword ? 'mdi-eye' : 'mdi-eye-off'"
             required
             :type="showRepeatPassword ? 'text' : 'password'"
             label="Repeat password"
@@ -59,7 +60,7 @@
       </v-row>
       <v-row justify="center">
         <v-col class="col-sm-5">
-          <v-btn color="primary" @click="register">Register</v-btn>
+          <v-btn color="primary" :loading="fetching" @click="register">Register</v-btn>
         </v-col>
       </v-row>
       <v-row justify="center">
@@ -76,7 +77,7 @@
 </template>
 
 <script>
-// import { mapState } from 'vuex'
+import { mapState } from 'vuex'
 import { validationMixin } from 'vuelidate'
 import { required, email, minLength, sameAs } from 'vuelidate/lib/validators'
 export default {
@@ -102,10 +103,10 @@ export default {
     }
   },
   methods: {
-    register() {
+    async register() {
       this.$v.$touch()
       if (!this.$v.$error) {
-        console.log('submit')
+        await this.$store.dispatch('register/register')
       }
     }
   },
@@ -158,6 +159,7 @@ export default {
         this.$store.commit('register/setShowRepeatPassword', value)
       }
     },
+    ...mapState('register', ['fetching']),
     nameErrors() {
       const errors = []
       if (!this.$v.name.$dirty) return errors

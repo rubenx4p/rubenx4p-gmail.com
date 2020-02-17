@@ -19,7 +19,7 @@
           <v-text-field
             v-model="password"
             :error-messages="passwordErrors"
-            :append-icon="true ? 'mdi-eye' : 'mdi-eye-off'"
+            :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
             required
             :type="showPassword ? 'text' : 'password'"
             label="Password"
@@ -31,7 +31,7 @@
       </v-row>
       <v-row justify="center">
         <v-col class="col-sm-5">
-          <v-btn color="primary" @click="login">Login</v-btn>
+          <v-btn color="primary" @click="login" :loading="fetching">Login</v-btn>
         </v-col>
       </v-row>
       <v-row justify="center">
@@ -47,6 +47,12 @@
         </v-col>
       </v-row>
     </v-container>
+    <v-snackbar v-model="snackbar">
+      {{ msg }}
+      <v-btn color="pink" text @click="snackbar = false">
+        Close
+      </v-btn>
+    </v-snackbar>
   </v-form>
 </template>
 
@@ -54,6 +60,7 @@
 // import { mapState } from 'vuex'
 import { validationMixin } from 'vuelidate'
 import { required, email, minLength } from 'vuelidate/lib/validators'
+import { mapState } from 'vuex'
 export default {
   name: 'login',
   created() {
@@ -74,11 +81,21 @@ export default {
     login() {
       this.$v.$touch()
       if (!this.$v.$error) {
-        console.log('submit')
+        const { email, password } = this
+        this.$store.dispatch('login/tryLogin', { email, password })
       }
     }
   },
   computed: {
+    ...mapState('login', ['fetching', 'msg']),
+    snackbar: {
+      get() {
+        return this.$store.state.login.snackbar
+      },
+      set(value) {
+        this.$store.commit('login/snackbar', value)
+      }
+    },
     email: {
       get() {
         return this.$store.state.login.email

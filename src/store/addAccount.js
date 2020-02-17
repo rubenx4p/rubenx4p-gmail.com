@@ -1,14 +1,12 @@
-import router from '@/router/index'
 import api from '@/api'
-
 const getDefaultState = () => {
   return {
-    name: 'ruben',
-    email: 'rubenx4p@gmail.com',
-    password: 'asdasdasd',
-    repeatPassword: 'asdasdasd',
+    name: 'Angular',
+    username: 'username 1',
+    password: 'password1',
     showPassword: false,
-    showRepeatPassword: false,
+    key: 'asdasdasd',
+    showKey: false,
     fetching: false
   }
 }
@@ -16,17 +14,18 @@ const getDefaultState = () => {
 export default {
   state: getDefaultState(),
   actions: {
-    async register({ commit, state, dispatch }) {
+    async tryAddAccount({ dispatch, commit, state }) {
+      console.log('state = ', state)
+      const { name, username, password, key } = state
       commit('fetching')
       try {
-        const { name, email, password } = state
-        const res = await api.post('users', { name, email, password })
+        const res = await api.post('accounts', { name, username, password, key })
+        // const { token } = res.data
+        // dispatch('auth/authSucceeded', token, { root: true })
         console.log('res = ', res)
-        dispatch('snackbar/snackbar', { msg: 'You have successfully registered' }, { root: true })
-        router.push('login')
       } catch (err) {
         console.log('err = ', err)
-        dispatch('snackbar/snackbar', { msg: 'You failed to registerּ' }, { root: true })
+        // commit('snackbar', true)
       } finally {
         commit('stopFetching')
       }
@@ -36,8 +35,8 @@ export default {
     setName(state, name) {
       state.name = name
     },
-    setEmail(state, email) {
-      state.email = email
+    setUsername(state, username) {
+      state.username = username
     },
     setPassword(state, password) {
       state.password = password
@@ -45,11 +44,11 @@ export default {
     setShowPassword(state, showPassword) {
       state.showPassword = showPassword
     },
-    setRepeatPassword(state, repeatPassword) {
-      state.repeatPassword = repeatPassword
+    setKey(state, key) {
+      state.key = key
     },
-    setShowRepeatPassword(state, showRepeatPassword) {
-      state.showRepeatPassword = showRepeatPassword
+    setShowKey(state, showKey) {
+      state.showKey = showKey
     },
     resetState(state) {
       Object.assign(state, getDefaultState())

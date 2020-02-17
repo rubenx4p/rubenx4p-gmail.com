@@ -2,20 +2,40 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import Login from '../views/Login.vue'
+import AddAccount from '../views/AddAccount.vue'
+import PageNotFound from '../views/PageNotFound.vue'
 import register from '../store/register'
-
+import store from '@/store' // your vuex store
 Vue.use(VueRouter)
+
+const ifNotAuthenticated = (to, from, next) => {
+  if (!store.getters['auth/isAuthenticated']) {
+    next()
+    return
+  }
+  next('/home')
+}
+
+const ifAuthenticated = (to, from, next) => {
+  if (store.getters['auth/isAuthenticated']) {
+    next()
+    return
+  }
+  next('/login')
+}
 
 const routes = [
   {
-    path: '/',
+    path: '/home',
     name: 'home',
-    component: Home
+    component: Home,
+    beforeEnter: ifAuthenticated
   },
   {
     path: '/login',
     name: 'login',
-    component: Login
+    component: Login,
+    beforeEnter: ifNotAuthenticated
   },
   {
     path: '/about',
@@ -28,7 +48,19 @@ const routes = [
   {
     path: '/register',
     name: register,
-    component: () => import(/* webpackChunkName: "register" */ '../views/Register.vue')
+    component: () => import(/* webpackChunkName: "register" */ '../views/Register.vue'),
+    beforeEnter: ifNotAuthenticated
+  },
+  {
+    path: '/add-account',
+    name: 'add-account',
+    component: AddAccount,
+    beforeEnter: ifAuthenticated
+  },
+  {
+    path: '*',
+    name: 'page-not-found',
+    component: PageNotFound
   }
 ]
 
