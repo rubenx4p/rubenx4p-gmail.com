@@ -1,34 +1,8 @@
 import api from '@/api'
-import to from 'await-to-js'
+import to from '../utils/to'
 const getDefaultState = () => {
   return {
-    accounts: {
-      // id1: {
-      //   id: 'id1',
-      //   accountName: 'Brunch this weekend?',
-      //   username: 'username1'
-      // },
-      // id2: {
-      //   id: 'id2',
-      //   accountName: 'Summer BBQ',
-      //   username: 'username2'
-      // },
-      // id3: {
-      //   id: 'id3',
-      //   accountName: 'Oui oui',
-      //   username: 'username3'
-      // },
-      // id4: {
-      //   id: 'id4',
-      //   accountName: 'Birthday gift',
-      //   username: 'username4'
-      // },
-      // id5: {
-      //   id: 'id5',
-      //   accountName: 'Recipe to try',
-      //   username: 'username5'
-      // }
-    },
+    accounts: {},
     nextExpirationDate: null,
     search: '',
     accountId: null
@@ -37,11 +11,12 @@ const getDefaultState = () => {
 export default {
   state: getDefaultState(),
   actions: {
-    async getAccounts({ dispatch, commit }) {
-      const [err, { accounts }] = await to(api.get('accounts'))
+    async getAccounts({ commit, dispatch }) {
+      const [{ accounts }, err] = await to(api.get('accounts'))
       if (err) {
-        console.error('err')
+        dispatch('snackbar/snackbar', { msg: err.msg }, { root: true })
       }
+
       const accountsObject = accounts.reduce((acc, curr) => {
         const account = {
           id: curr._id,
@@ -51,9 +26,23 @@ export default {
         acc[account.id] = account
         return acc
       }, {})
-      console.log('accountsObject = ', accountsObject)
+
       commit('receiveAccounts', accountsObject)
-      // dispatch('syncLocalStorage')
+    },
+    async deleteAccount({ dispatch, commit, state }, { account, key }) {
+      const { id } = account
+
+      const [data, err] = await to(api.delete(`accounts/${id}`, { data: { key } }))
+
+      if (err) {
+        return dispatch('snackbar/snackbar', { msg: err.msg }, { root: true })
+      }
+
+      const accounts = { ...state.accounts }
+      delete accounts[id]
+
+      commit('deleteAccount', accounts)
+      dispatch('snackbar/snackbar', { msg: data.msg }, { root: true })
     },
     async syncLocalStorage({ dispatch }) {
       console.log('!!!!!!!!!!')
@@ -77,6 +66,9 @@ export default {
     selectAccount(state, account) {
       state.accountId = state.accountId === account.id ? '' : account.id
       console.log('account.id = ', account.id)
+    },
+    deleteAccount(state, accounts) {
+      state.accounts = accounts
     }
   },
   getters: {

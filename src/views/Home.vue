@@ -1,13 +1,18 @@
 <template>
   <div class="home">
     <HomeToolbar :search="search" @input="setSearch($event)" />
-    <HomeList :items="accounts" @selectItem="selectAccount($event)" :selected="account" />
+    <HomeList
+      :items="accounts"
+      @selectItem="selectAccount($event)"
+      :selected="account"
+      @deleteItem="deleteAccount($event)"
+    />
     <NavigationDrawer></NavigationDrawer>
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import { mapMutations } from 'vuex'
 
 import HomeToolbar from '@/components/HomeToolbar.vue'
@@ -24,6 +29,7 @@ export default {
     this.$store.dispatch('home/getAccounts')
   },
   methods: {
+    ...mapActions('home', ['deleteAccount']),
     ...mapMutations('home', ['setSearch', 'selectAccount'])
   },
   computed: {
