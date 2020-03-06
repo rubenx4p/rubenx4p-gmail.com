@@ -3,9 +3,12 @@
     <HomeToolbar :search="search" @input="setSearch($event)" />
     <HomeList
       :items="accounts"
-      @selectItem="selectAccount($event)"
       :selected="account"
+      :deleting="deleting"
+      :getingPassword="getingPassword"
+      @selectItem="selectAccount($event)"
       @deleteItem="deleteAccount($event)"
+      @getPassword="getPassword"
     />
     <NavigationDrawer></NavigationDrawer>
   </div>
@@ -29,11 +32,11 @@ export default {
     this.$store.dispatch('home/getAccounts')
   },
   methods: {
-    ...mapActions('home', ['deleteAccount']),
+    ...mapActions('home', ['deleteAccount', 'getPassword']),
     ...mapMutations('home', ['setSearch', 'selectAccount'])
   },
   computed: {
-    ...mapGetters('home', ['accounts', 'search', 'account'])
+    ...mapGetters('home', ['accounts', 'search', 'account', 'deleting', 'getingPassword'])
   }
 }
 </script>

@@ -4,8 +4,11 @@
       <HomeListItem
         :item="item"
         :selected="selected"
+        :deleting="deleting"
+        :getingPassword="getingPassword"
         @selectItem="$emit('selectItem', $event)"
         @deleteItem="$emit('deleteItem', $event)"
+        @getPassword="$emit('getPassword', $event)"
       />
       <v-divider></v-divider>
     </div>
@@ -33,13 +36,17 @@ export default {
     selected: {
       type: Object,
       default: undefined
+    },
+    deleting: {
+      type: Boolean,
+      default: false
+    },
+    getingPassword: {
+      type: Boolean,
+      default: false
     }
   },
-  methods: {
-    ok() {
-      console.log('AAA')
-    }
-  },
+  methods: {},
   computed: {}
 }
 </script>

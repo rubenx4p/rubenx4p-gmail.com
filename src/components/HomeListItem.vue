@@ -4,8 +4,8 @@
       <v-list-item-content>
         <v-list-item-title>Account: {{ item.accountName }}</v-list-item-title>
         <v-list-item-title>Username: {{ item.username }}</v-list-item-title>
-        <v-list-item-title v-if="!(selected === item && !item.password)"
-          >Passwrod: {{ !!item.password || 'Unavailable' }}</v-list-item-title
+        <v-list-item-title v-if="!(selected === item && !item.password)" :class="item.password ? 'password' : ''"
+          >Passwrod: {{ !!item.password ? item.password : 'Unavailable' }}</v-list-item-title
         >
       </v-list-item-content>
     </v-list-item>
@@ -24,8 +24,8 @@
         ></v-text-field>
       </v-list-item-title>
       <v-list-item-action class="d-flex flex-row">
-        <v-btn class="" color="primary" @click="ok">ok</v-btn>
-        <v-btn class="mx-2" color="error" @click="tryToDeleteItem">delete</v-btn>
+        <v-btn class="" color="primary" @click="tryToGetPassword" :loading="getingPassword">get password</v-btn>
+        <v-btn class="mx-2" color="error" @click="tryToDeleteItem" :loading="deleting">delete</v-btn>
       </v-list-item-action>
     </v-list-item>
   </div>
@@ -57,17 +57,31 @@ export default {
     selected: {
       type: Object,
       default: undefined
+    },
+    deleting: {
+      type: Boolean,
+      default: false
+    },
+    getingPassword: {
+      type: Boolean,
+      default: false
     }
   },
   methods: {
-    ok() {
-      console.log('AAA')
+    valid() {
+      this.$v.$touch()
+      return !this.$v.$error
     },
     tryToDeleteItem() {
-      this.$v.$touch()
-      if (!this.$v.$error) {
+      if (this.valid()) {
         const { selected, key } = this
         this.$emit('deleteItem', { account: selected, key: key })
+      }
+    },
+    tryToGetPassword() {
+      if (this.valid()) {
+        const { selected, key } = this
+        this.$emit('getPassword', { account: selected, key: key })
       }
     }
   },
@@ -85,5 +99,8 @@ export default {
 <style lang="scss" scoped>
 .selected {
   background-color: lightyellow;
+}
+.password {
+  color: green;
 }
 </style>

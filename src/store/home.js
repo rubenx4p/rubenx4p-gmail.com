@@ -5,7 +5,9 @@ const getDefaultState = () => {
     accounts: {},
     nextExpirationDate: null,
     search: '',
-    accountId: null
+    accountId: null,
+    deleting: false,
+    getingPassword: false
   }
 }
 export default {
@@ -31,9 +33,9 @@ export default {
     },
     async deleteAccount({ dispatch, commit, state }, { account, key }) {
       const { id } = account
-
+      commit('deleting', true)
       const [data, err] = await to(api.delete(`accounts/${id}`, { data: { key } }))
-
+      commit('deleting', false)
       if (err) {
         return dispatch('snackbar/snackbar', { msg: err.msg }, { root: true })
       }
@@ -42,6 +44,25 @@ export default {
       delete accounts[id]
 
       commit('deleteAccount', accounts)
+      dispatch('snackbar/snackbar', { msg: data.msg }, { root: true })
+    },
+    async getPassword({ commit, dispatch, state }, { account, key }) {
+      const { id } = account
+
+      commit('getingPassword', true)
+      const [data, err] = await to(api.post(`accounts/${id}`, { key }))
+      commit('getingPassword', false)
+
+      if (err) {
+        return dispatch('snackbar/snackbar', { msg: err.msg }, { root: true })
+      }
+
+      account.password = data.password
+
+      const accounts = { ...state.accounts }
+      accounts[account.id] = account
+
+      commit('updatePassword', accounts)
       dispatch('snackbar/snackbar', { msg: data.msg }, { root: true })
     },
     async syncLocalStorage({ dispatch }) {
@@ -65,10 +86,18 @@ export default {
     },
     selectAccount(state, account) {
       state.accountId = state.accountId === account.id ? '' : account.id
-      console.log('account.id = ', account.id)
+    },
+    deleting(state, value) {
+      state.deleting = value
+    },
+    getingPassword(state, value) {
+      state.getingPassword = value
     },
     deleteAccount(state, accounts) {
       state.accounts = accounts
+    },
+    updatePassword(state, accounts) {
+      state.accounts = { ...accounts }
     }
   },
   getters: {
@@ -80,6 +109,8 @@ export default {
       return accounts.filter(account => account.accountName.toLowerCase().includes(state.search.toLowerCase()))
     },
     search: state => state.search,
-    account: state => state.accounts[state.accountId]
+    account: state => state.accounts[state.accountId],
+    deleting: state => state.deleting,
+    getingPassword: state => state.getingPassword
   }
 }
