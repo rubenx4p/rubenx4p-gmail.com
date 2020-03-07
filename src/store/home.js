@@ -1,5 +1,7 @@
 import api from '@/api'
 import to from '../utils/to'
+import { fetchStoredPassword, storePassword } from './utils/home'
+
 const getDefaultState = () => {
   return {
     accounts: {},
@@ -14,10 +16,13 @@ export default {
   state: getDefaultState(),
   actions: {
     async getAccounts({ commit, dispatch }) {
-      const [{ accounts }, err] = await to(api.get('accounts'))
+      const [data, err] = await to(api.get('accounts'))
+
       if (err) {
         dispatch('snackbar/snackbar', { msg: err.msg }, { root: true })
       }
+
+      const { accounts } = data
 
       const accountsObject = accounts.reduce((acc, curr) => {
         const account = {
@@ -25,6 +30,9 @@ export default {
           accountName: curr.name,
           username: curr.username
         }
+
+        account.password = fetchStoredPassword(account)
+
         acc[account.id] = account
         return acc
       }, {})
@@ -59,18 +67,13 @@ export default {
 
       account.password = data.password
 
+      storePassword(account)
+
       const accounts = { ...state.accounts }
       accounts[account.id] = account
 
       commit('updatePassword', accounts)
       dispatch('snackbar/snackbar', { msg: data.msg }, { root: true })
-    },
-    async syncLocalStorage({ dispatch }) {
-      console.log('!!!!!!!!!!')
-      const data = window.localStorage.getItem('accounts-data')
-    },
-    async setAccounts({ commit }) {
-      // commit()
     }
   },
   mutations: {

@@ -33,10 +33,13 @@ export default {
   },
   methods: {
     ...mapActions('home', ['deleteAccount', 'getPassword']),
-    ...mapMutations('home', ['setSearch', 'selectAccount'])
+    ...mapMutations('home', ['setSearch', 'selectAccount', 'resetState'])
   },
   computed: {
     ...mapGetters('home', ['accounts', 'search', 'account', 'deleting', 'getingPassword'])
+  },
+  destroyed() {
+    this.resetState()
   }
 }
 </script>
