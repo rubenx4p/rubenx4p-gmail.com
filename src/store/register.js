@@ -21,11 +21,9 @@ export default {
       try {
         const { name, email, password } = state
         const res = await api.post('users', { name, email, password })
-        console.log('res = ', res)
         dispatch('snackbar/snackbar', { msg: 'You have successfully registered' }, { root: true })
         router.push('login')
       } catch (err) {
-        console.log('err = ', err)
         dispatch('snackbar/snackbar', { msg: 'You failed to registerּ' }, { root: true })
       } finally {
         commit('stopFetching')

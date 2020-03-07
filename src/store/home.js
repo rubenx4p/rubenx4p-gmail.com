@@ -81,7 +81,6 @@ export default {
       state.accounts = accounts
     },
     setSearch(state, search) {
-      console.log('search = ', search)
       state.search = search
     },
     resetState(state) {

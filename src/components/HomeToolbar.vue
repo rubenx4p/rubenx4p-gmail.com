@@ -31,9 +31,6 @@ export default {
   },
   methods: {
     ...mapMutations('settings', ['setDrawer'])
-    // setSearch(value) {
-    //   console.log(value)
-    // }
   },
   computed: {
     ...mapState('settings', ['drawer'])

@@ -99,9 +99,6 @@ export default {
         this.$store.dispatch('addAccount/tryAddAccount')
       }
     }
-    // setSearch(value) {
-    //   console.log(value)
-    // }
   },
   computed: {
     ...mapState('addAccount', ['fetching']),

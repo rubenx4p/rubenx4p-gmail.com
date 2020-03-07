@@ -14,15 +14,12 @@ export default {
   state: getDefaultState(),
   actions: {
     async tryLogin({ dispatch, commit }, credentials) {
-      console.log('credentials = ', credentials)
       commit('fetching')
       try {
         const res = await api.post('auth', credentials)
         const { token } = res
         dispatch('auth/authSucceeded', token, { root: true })
-        console.log('res = ', res)
       } catch (err) {
-        console.log('err = ', err)
         commit('snackbar', true)
       } finally {
         commit('stopFetching')
