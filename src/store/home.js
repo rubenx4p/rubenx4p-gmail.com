@@ -65,12 +65,12 @@ export default {
         return dispatch('snackbar/snackbar', { msg: err.msg }, { root: true })
       }
 
-      account.password = data.password
+      const accountWithPassword = { ...account, password: data.password }
 
-      storePassword(account)
+      storePassword(accountWithPassword)
 
       const accounts = { ...state.accounts }
-      accounts[account.id] = account
+      accounts[accountWithPassword.id] = accountWithPassword
 
       commit('updatePassword', accounts)
       dispatch('snackbar/snackbar', { msg: data.msg }, { root: true })

@@ -26,6 +26,10 @@ const ifAuthenticated = (to, from, next) => {
 
 const routes = [
   {
+    path: '/',
+    redirect: '/home'
+  },
+  {
     path: '/home',
     name: 'home',
     component: Home,
@@ -65,6 +69,7 @@ const routes = [
 ]
 
 const router = new VueRouter({
+  mode: 'history',
   routes
 })
 
