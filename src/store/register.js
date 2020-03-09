@@ -20,7 +20,7 @@ export default {
       commit('fetching')
       try {
         const { name, email, password } = state
-        const res = await api.post('users', { name, email, password })
+        await api.post('users', { name, email, password })
         dispatch('snackbar/snackbar', { msg: 'You have successfully registered' }, { root: true })
         router.push('login')
       } catch (err) {
