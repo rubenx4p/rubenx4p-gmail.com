@@ -31,14 +31,14 @@
       </v-row>
       <v-row justify="center">
         <v-col class="col-sm-5">
-          <v-btn color="primary" @click="login" :loading="fetching">Login</v-btn>
+          <v-btn color="primary" @click="login" :loading="fetching" :disabled="fetching">Login</v-btn>
         </v-col>
       </v-row>
       <v-row justify="center">
         <v-col class="col-sm-5">
           <v-row>
             <v-col class="">
-              <router-link to="/foo">Forgot your password</router-link>
+              <router-link to="/forgot-password">Forgot your password</router-link>
             </v-col>
             <v-col class="">
               <router-link to="/register">Register</router-link>

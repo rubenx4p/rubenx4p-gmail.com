@@ -1,10 +1,5 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
-import Login from '../views/Login.vue'
-import AddAccount from '../views/AddAccount.vue'
-import PageNotFound from '../views/PageNotFound.vue'
-import register from '../store/register'
 import store from '@/store' // your vuex store
 Vue.use(VueRouter)
 
@@ -32,13 +27,13 @@ const routes = [
   {
     path: '/home',
     name: 'home',
-    component: Home,
+    component: () => import(/* webpackChunkName: "home" */ '../views/Home.vue'),
     beforeEnter: ifAuthenticated
   },
   {
     path: '/login',
     name: 'login',
-    component: Login,
+    component: () => import(/* webpackChunkName: "login" */ '../views/Login.vue'),
     beforeEnter: ifNotAuthenticated
   },
   {
@@ -51,20 +46,32 @@ const routes = [
   },
   {
     path: '/register',
-    name: register,
+    name: 'register',
     component: () => import(/* webpackChunkName: "register" */ '../views/Register.vue'),
+    beforeEnter: ifNotAuthenticated
+  },
+  {
+    path: '/forgot-password',
+    name: 'forgot-password',
+    component: () => import(/* webpackChunkName: "forgotPassword" */ '../views/ForgotPassword.vue'),
     beforeEnter: ifNotAuthenticated
   },
   {
     path: '/add-account',
     name: 'add-account',
-    component: AddAccount,
+    component: () => import(/* webpackChunkName: "addAccount" */ '../views/AddAccount.vue'),
     beforeEnter: ifAuthenticated
+  },
+  {
+    path: '/reset-password/:token',
+    name: 'reset-password',
+    component: () => import(/* webpackChunkName: "resetPassword" */ '../views/ResetPassword.vue')
+    // beforeEnter: ifNotAuthenticated
   },
   {
     path: '*',
     name: 'page-not-found',
-    component: PageNotFound
+    component: () => import(/* webpackChunkName: "pageNotFound" */ '../views/PageNotFound.vue')
   }
 ]
 

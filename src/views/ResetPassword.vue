@@ -3,28 +3,12 @@
     <v-container fluid>
       <v-row justify="center">
         <v-col class="col-sm-5">
-          <v-text-field
-            v-model="name"
-            :error-messages="nameErrors"
-            required
-            type="text"
-            label="Name"
-            @input="$v.name.$touch()"
-            @blur="$v.name.$touch()"
-          ></v-text-field>
+          <div class="headline">Reset your password</div>
         </v-col>
       </v-row>
       <v-row justify="center">
         <v-col class="col-sm-5">
-          <v-text-field
-            v-model="email"
-            :error-messages="emailErrors"
-            required
-            type="email"
-            label="Email"
-            @input="$v.email.$touch()"
-            @blur="$v.email.$touch()"
-          ></v-text-field>
+          <div class="body-2">If you reset your password, all your accounts will be deleted</div>
         </v-col>
       </v-row>
       <v-row justify="center">
@@ -60,7 +44,7 @@
       </v-row>
       <v-row justify="center">
         <v-col class="col-sm-5">
-          <v-btn color="primary" @click="register" :loading="fetching" :disabled="fetching">Register</v-btn>
+          <v-btn color="primary" @click="resetPassword" :loading="fetching" :disabled="fetching">reset password</v-btn>
         </v-col>
       </v-row>
       <v-row justify="center">
@@ -79,21 +63,14 @@
 <script>
 import { mapState } from 'vuex'
 import { validationMixin } from 'vuelidate'
-import { required, email, minLength, sameAs } from 'vuelidate/lib/validators'
+import { required, minLength, sameAs } from 'vuelidate/lib/validators'
 export default {
-  name: 'register',
+  name: 'resetPassword',
   created() {
-    this.$store.commit('register/resetState')
+    this.$store.commit('resetPassword/resetState')
   },
   mixins: [validationMixin],
   validations: {
-    name: {
-      required
-    },
-    email: {
-      required,
-      email
-    },
     password: {
       minLength: minLength(8),
       required
@@ -103,75 +80,47 @@ export default {
     }
   },
   methods: {
-    async register() {
+    async resetPassword() {
       this.$v.$touch()
+
       if (!this.$v.$error) {
-        await this.$store.dispatch('register/register')
+        await this.$store.dispatch('resetPassword/resetPassword')
       }
     }
   },
   computed: {
-    name: {
-      get() {
-        return this.$store.state.register.name
-      },
-      set(value) {
-        this.$store.commit('register/setName', value)
-      }
-    },
-    email: {
-      get() {
-        return this.$store.state.register.email
-      },
-      set(value) {
-        this.$store.commit('register/setEmail', value)
-      }
-    },
+    ...mapState('resetPassword', ['fetching']),
     password: {
       get() {
-        return this.$store.state.register.password
+        return this.$store.state.resetPassword.password
       },
       set(value) {
-        this.$store.commit('register/setPassword', value)
+        this.$store.commit('resetPassword/setPassword', value)
       }
     },
     repeatPassword: {
       get() {
-        return this.$store.state.register.repeatPassword
+        return this.$store.state.resetPassword.repeatPassword
       },
       set(value) {
-        this.$store.commit('register/setRepeatPassword', value)
+        this.$store.commit('resetPassword/setRepeatPassword', value)
       }
     },
     showPassword: {
       get() {
-        return this.$store.state.register.showPassword
+        return this.$store.state.resetPassword.showPassword
       },
       set(value) {
-        this.$store.commit('register/setShowPassword', value)
+        this.$store.commit('resetPassword/setShowPassword', value)
       }
     },
     showRepeatPassword: {
       get() {
-        return this.$store.state.register.showRepeatPassword
+        return this.$store.state.resetPassword.showRepeatPassword
       },
       set(value) {
-        this.$store.commit('register/setShowRepeatPassword', value)
+        this.$store.commit('resetPassword/setShowRepeatPassword', value)
       }
-    },
-    ...mapState('register', ['fetching']),
-    nameErrors() {
-      const errors = []
-      if (!this.$v.name.$dirty) return errors
-      !this.$v.name.required && errors.push('Name is required')
-      return errors
-    },
-    emailErrors() {
-      const errors = []
-      if (!this.$v.email.$dirty) return errors
-      !this.$v.email.email && errors.push('Must be valid e-mail')
-      !this.$v.email.required && errors.push('E-mail is required')
-      return errors
     },
     passwordErrors() {
       const errors = []

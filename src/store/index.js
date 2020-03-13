@@ -7,6 +7,8 @@ import Auth from './auth'
 import Snackbar from './snackbar'
 import Settings from './settings'
 import AddAccount from './addAccount'
+import ForgotPassword from './forgotPassword'
+import ResetPassword from './resetPassword'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -44,6 +46,14 @@ export default new Vuex.Store({
     addAccount: {
       namespaced: true,
       ...AddAccount
+    },
+    forgotPassword: {
+      namespaced: true,
+      ...ForgotPassword
+    },
+    resetPassword: {
+      namespaced: true,
+      ...ResetPassword
     }
   }
 })
