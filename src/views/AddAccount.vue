@@ -38,10 +38,12 @@
             v-model="password"
             :error-messages="passwordErrors"
             :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+            append-outer-icon="mdi-key-variant"
             required
             :type="showPassword ? 'text' : 'password'"
             label="Password"
             @click:append="showPassword = !showPassword"
+            @click:append-outer="generate"
             @input="$v.password.$touch()"
             @blur="$v.password.$touch()"
           ></v-text-field>
@@ -64,7 +66,7 @@
       </v-row>
       <v-row justify="center">
         <v-col class="col-sm-5">
-          <v-btn color="primary" @click="addAccount" :loading="fetching">add account</v-btn>
+          <v-btn @click="addAccount" :loading="fetching" color="primary">add account</v-btn>
         </v-col>
       </v-row>
     </v-container>
@@ -75,6 +77,8 @@
 import { mapState } from 'vuex'
 import { required } from 'vuelidate/lib/validators'
 import { validationMixin } from 'vuelidate'
+import { generatePassword } from '@/utils/index'
+
 export default {
   name: 'AddAccount',
   mixins: [validationMixin],
@@ -98,6 +102,9 @@ export default {
       if (!this.$v.$error) {
         this.$store.dispatch('addAccount/tryAddAccount')
       }
+    },
+    generate() {
+      this.password = generatePassword()
     }
   },
   computed: {
