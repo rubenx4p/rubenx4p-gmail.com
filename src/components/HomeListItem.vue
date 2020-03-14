@@ -9,7 +9,7 @@
         >
       </v-list-item-content>
     </v-list-item>
-    <v-list-item class="d-flex flex-column" v-if="selected === item && !item.password">
+    <v-list-item class="d-flex flex-column" v-if="selected === item">
       <v-list-item-title class="align-self-stretch">
         <v-text-field
           v-model="key"
@@ -24,8 +24,13 @@
         ></v-text-field>
       </v-list-item-title>
       <v-list-item-action class="d-flex flex-row">
-        <v-btn class="" color="primary" @click="tryToGetPassword" :loading="getingPassword">get password</v-btn>
+        <v-btn v-show="!item.password" class="" color="primary" @click="tryToGetPassword" :loading="getingPassword"
+          >get password</v-btn
+        >
         <v-btn class="mx-2" color="error" @click="tryToDeleteItem" :loading="deleting">delete</v-btn>
+        <v-btn v-show="item.password" @click="copy" class="mx-2" fab small color="primary" title="copy to clipboard">
+          <v-icon dark>mdi-content-copy</v-icon>
+        </v-btn>
       </v-list-item-action>
     </v-list-item>
   </div>
@@ -83,6 +88,9 @@ export default {
         const { selected, key } = this
         this.$emit('getPassword', { account: selected, key: key })
       }
+    },
+    copy() {
+      this.$emit('copy', this.item.password)
     }
   },
   computed: {

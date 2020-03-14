@@ -4,11 +4,11 @@ import to from '@/utils/to'
 
 const getDefaultState = () => {
   return {
-    name: 'Angular',
-    username: 'username 1',
-    password: 'password1',
+    name: '',
+    username: '',
+    password: '',
     showPassword: false,
-    key: 'asdasdasd',
+    key: '',
     showKey: false,
     fetching: false
   }

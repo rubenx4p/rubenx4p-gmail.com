@@ -74,6 +74,10 @@ export default {
 
       commit('updatePassword', accounts)
       dispatch('snackbar/snackbar', { msg: data.msg }, { root: true })
+    },
+    copy({ dispatch }, password) {
+      window.navigator.clipboard.writeText(password)
+      return dispatch('snackbar/snackbar', { msg: `${password} copied to the clipboard` }, { root: true })
     }
   },
   mutations: {

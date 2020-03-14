@@ -16,6 +16,7 @@ export default {
     },
     logout({ commit }) {
       localStorage.removeItem('token')
+      localStorage.removeItem('accounts-storage')
       commit('removeToken')
       router.push('/login')
     }
