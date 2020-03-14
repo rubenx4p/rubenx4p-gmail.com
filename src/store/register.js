@@ -3,10 +3,10 @@ import api from '@/api'
 
 const getDefaultState = () => {
   return {
-    name: 'ruben',
-    email: 'rubenx4p@gmail.com',
-    password: 'asdasdasd',
-    repeatPassword: 'asdasdasd',
+    name: '',
+    email: '',
+    password: '',
+    repeatPassword: '',
     showPassword: false,
     showRepeatPassword: false,
     fetching: false

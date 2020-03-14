@@ -4,7 +4,7 @@ import to from '@/utils/to'
 
 const getDefaultState = () => {
   return {
-    email: 'rubenx4p@gmail.com',
+    email: '',
     fetching: false
   }
 }
