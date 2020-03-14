@@ -1,6 +1,18 @@
 <template>
   <v-toolbar max-height="48" color="elevation-0">
-    <v-app-bar-nav-icon @click="setDrawer(!drawer)"></v-app-bar-nav-icon>
+    <v-menu>
+      <template v-slot:activator="{ on }">
+        <v-btn icon v-on="on">
+          <v-icon>mdi-dots-vertical</v-icon>
+        </v-btn>
+      </template>
+
+      <v-list>
+        <v-list-item @click="logout">
+          <v-list-item-title>Logout</v-list-item-title>
+        </v-list-item>
+      </v-list>
+    </v-menu>
 
     <v-text-field
       hide-details
@@ -18,11 +30,12 @@
 </template>
 
 <script>
-import { mapMutations, mapState } from 'vuex'
 export default {
   name: 'HelloToolbar',
 
-  data: () => ({}),
+  data() {
+    return {}
+  },
   props: {
     search: {
       type: String,
@@ -30,10 +43,10 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('settings', ['setDrawer'])
+    logout() {
+      this.$store.dispatch('auth/logout')
+    }
   },
-  computed: {
-    ...mapState('settings', ['drawer'])
-  }
+  computed: {}
 }
 </script>

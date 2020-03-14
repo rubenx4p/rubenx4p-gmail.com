@@ -10,7 +10,6 @@
       @deleteItem="deleteAccount($event)"
       @getPassword="getPassword"
     />
-    <NavigationDrawer></NavigationDrawer>
   </div>
 </template>
 
@@ -20,13 +19,11 @@ import { mapMutations } from 'vuex'
 
 import HomeToolbar from '@/components/HomeToolbar.vue'
 import HomeList from '@/components/HomeList.vue'
-import NavigationDrawer from '@/components/NavigationDrawer'
 export default {
   name: 'home',
   components: {
     HomeToolbar,
-    HomeList,
-    NavigationDrawer
+    HomeList
   },
   created() {
     this.$store.dispatch('home/getAccounts')

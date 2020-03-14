@@ -13,9 +13,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   strict: true,
-  state: {
-    drawer: true
-  },
+  state: {},
   mutations: {},
   actions: {},
   modules: {

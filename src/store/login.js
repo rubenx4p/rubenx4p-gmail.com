@@ -1,8 +1,9 @@
 import api from '@/api'
+import to from '@/utils/to'
 const getDefaultState = () => {
   return {
-    email: 'rubenx4p@gmail.com',
-    password: 'asdasdasd',
+    email: '',
+    password: '',
     showPassword: false,
     fetching: false,
     msg: '',
@@ -15,15 +16,15 @@ export default {
   actions: {
     async tryLogin({ dispatch, commit }, credentials) {
       commit('fetching')
-      try {
-        const res = await api.post('auth', credentials)
-        const { token } = res
-        dispatch('auth/authSucceeded', token, { root: true })
-      } catch (err) {
-        commit('snackbar', true)
-      } finally {
-        commit('stopFetching')
+      const [res, err] = await to(api.post('auth', credentials))
+      commit('stopFetching')
+
+      if (err) {
+        dispatch('snackbar/snackbar', { msg: err.msg }, { root: true })
       }
+
+      const { token } = res
+      dispatch('auth/authSucceeded', token, { root: true })
     }
   },
   mutations: {

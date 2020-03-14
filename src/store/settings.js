@@ -1,15 +1,9 @@
 const getDefaultState = () => {
-  return {
-    drawer: false
-  }
+  return {}
 }
 export default {
   state: getDefaultState(),
   actions: {},
-  mutations: {
-    setDrawer(state, value) {
-      state.drawer = value
-    }
-  },
+  mutations: {},
   getters: {}
 }

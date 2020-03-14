@@ -18,7 +18,6 @@ export default {
       localStorage.removeItem('token')
       commit('removeToken')
       router.push('/login')
-      commit('settings/setDrawer', false, { root: true })
     }
   },
   mutations: {
@@ -30,6 +29,8 @@ export default {
     }
   },
   getters: {
-    isAuthenticated: state => !!state.token
+    isAuthenticated: state => {
+      return !!state.token
+    }
   }
 }
