@@ -9,6 +9,7 @@
         @selectItem="$emit('selectItem', $event)"
         @deleteItem="$emit('deleteItem', $event)"
         @getPassword="$emit('getPassword', $event)"
+        @copy="$emit('copy', $event)"
       />
       <v-divider></v-divider>
     </div>

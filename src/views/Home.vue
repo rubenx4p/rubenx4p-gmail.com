@@ -9,6 +9,7 @@
       @selectItem="selectAccount($event)"
       @deleteItem="deleteAccount($event)"
       @getPassword="getPassword"
+      @copy="copy"
     />
   </div>
 </template>
@@ -29,7 +30,7 @@ export default {
     this.$store.dispatch('home/getAccounts')
   },
   methods: {
-    ...mapActions('home', ['deleteAccount', 'getPassword']),
+    ...mapActions('home', ['deleteAccount', 'getPassword', 'copy']),
     ...mapMutations('home', ['setSearch', 'selectAccount', 'resetState'])
   },
   computed: {
