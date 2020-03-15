@@ -1,5 +1,6 @@
 import router from '@/router/index'
 import api from '@/api'
+import to from '@/utils/to'
 
 const getDefaultState = () => {
   return {
@@ -17,17 +18,18 @@ export default {
   state: getDefaultState(),
   actions: {
     async register({ commit, state, dispatch }) {
+      const { name, email, password } = state
+
       commit('fetching')
-      try {
-        const { name, email, password } = state
-        await api.post('users', { name, email, password })
-        dispatch('snackbar/snackbar', { msg: 'You have successfully registered' }, { root: true })
-        router.push('login')
-      } catch (err) {
-        dispatch('snackbar/snackbar', { msg: 'You failed to registerּ' }, { root: true })
-      } finally {
-        commit('stopFetching')
+      const [data, dataErr] = await to(api.post('users', { name, email, password }))
+      commit('stopFetching')
+
+      if (dataErr) {
+        return dispatch('snackbar/snackbar', { msg: dataErr.msg }, { root: true })
       }
+
+      dispatch('snackbar/snackbar', { msg: data.msg }, { root: true })
+      router.push('login')
     }
   },
   mutations: {
