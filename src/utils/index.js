@@ -4,7 +4,7 @@ export const getRandomInt = (min, max) => {
   return Math.floor(Math.random() * (max - min)) + min //The maximum is exclusive and the minimum is inclusive
 }
 
-export const generatePassword = (min = 8, max = 12) => {
+export const generatePassword = (min = 12, max = 12) => {
   var length = getRandomInt(min, max),
     charset = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()',
     retVal = ''
