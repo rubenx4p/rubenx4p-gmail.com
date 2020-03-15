@@ -96,6 +96,9 @@ export default {
       required
     }
   },
+  created() {
+    this.$store.commit('addAccount/resetState')
+  },
   methods: {
     addAccount() {
       this.$v.$touch()
