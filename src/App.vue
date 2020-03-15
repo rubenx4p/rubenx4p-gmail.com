@@ -3,7 +3,7 @@
     <v-content>
       <router-view></router-view>
     </v-content>
-    <v-snackbar v-model="snackbar">
+    <v-snackbar v-model="snackbar" multi-line>
       {{ msg }}
       <v-btn color="pink" text @click="snackbar = false">
         Close
