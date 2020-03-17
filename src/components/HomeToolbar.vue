@@ -8,6 +8,9 @@
       </template>
 
       <v-list>
+        <v-list-item @click="exportCSV">
+          <v-list-item-title>Export to CSV</v-list-item-title>
+        </v-list-item>
         <v-list-item @click="logout">
           <v-list-item-title>Logout</v-list-item-title>
         </v-list-item>
@@ -45,6 +48,9 @@ export default {
   methods: {
     logout() {
       this.$store.dispatch('auth/logout')
+    },
+    exportCSV() {
+      this.$store.dispatch('home/exportCSV')
     }
   },
   computed: {}
