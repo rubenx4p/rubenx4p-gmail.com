@@ -80,7 +80,6 @@ export default {
       return dispatch('snackbar/snackbar', { msg: `${password} copied to the clipboard` }, { root: true })
     },
     exportCSV({ state }) {
-      console.log('state = ', state)
       const arrList = [['Account', 'Username', 'Password']]
 
       const data = Object.values(state.accounts).reduce((acc, curr) => {
@@ -91,7 +90,6 @@ export default {
         return acc
       }, arrList)
 
-      console.log('data = ', data)
       exportCSV(data, 'accounts')
     }
   },
