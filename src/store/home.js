@@ -5,11 +5,7 @@ import { exportCSV } from '../utils/csv'
 const getDefaultState = () => {
   return {
     accounts: {},
-    nextExpirationDate: null,
-    search: '',
-    accountId: null,
-    deleting: false,
-    getingPassword: false
+    search: ''
   }
 }
 export default {
@@ -39,41 +35,22 @@ export default {
 
       commit('receiveAccounts', accountsObject)
     },
-    async deleteAccount({ dispatch, commit, state }, { account, key }) {
-      const { id } = account
-      commit('deleting', true)
-      const [data, err] = await to(api.delete(`accounts/${id}`, { data: { key } }))
-      commit('deleting', false)
-      if (err) {
-        return dispatch('snackbar/snackbar', { msg: err.msg }, { root: true })
-      }
-
+    deleteAccount({ commit, state }, { id }) {
       const accounts = { ...state.accounts }
       delete accounts[id]
 
-      commit('deleteAccount', accounts)
-      dispatch('snackbar/snackbar', { msg: data.msg }, { root: true })
+      commit('updateAccounts', accounts)
     },
-    async getPassword({ commit, dispatch, state }, { account, key }) {
-      const { id } = account
-
-      commit('getingPassword', true)
-      const [data, err] = await to(api.post(`accounts/${id}`, { key }))
-      commit('getingPassword', false)
-
-      if (err) {
-        return dispatch('snackbar/snackbar', { msg: err.msg }, { root: true })
-      }
-
-      const accountWithPassword = { ...account, password: data.password }
+    receiveAccountPassword({ commit, state }, { id, password }) {
+      const account = state.accounts[id]
+      const accountWithPassword = { ...account, password }
 
       storePassword(accountWithPassword)
 
       const accounts = { ...state.accounts }
       accounts[accountWithPassword.id] = accountWithPassword
 
-      commit('updatePassword', accounts)
-      dispatch('snackbar/snackbar', { msg: data.msg }, { root: true })
+      commit('updateAccounts', accounts)
     },
     copy({ dispatch }, password) {
       window.navigator.clipboard.writeText(password)
@@ -103,19 +80,8 @@ export default {
     resetState(state) {
       Object.assign(state, getDefaultState())
     },
-    selectAccount(state, account) {
-      state.accountId = state.accountId === account.id ? '' : account.id
-    },
-    deleting(state, value) {
-      state.deleting = value
-    },
-    getingPassword(state, value) {
-      state.getingPassword = value
-    },
-    deleteAccount(state, accounts) {
-      state.accounts = accounts
-    },
-    updatePassword(state, accounts) {
+
+    updateAccounts(state, accounts) {
       state.accounts = { ...accounts }
     }
   },
@@ -128,7 +94,6 @@ export default {
       return accounts.filter(account => account.accountName.toLowerCase().includes(state.search.toLowerCase()))
     },
     search: state => state.search,
-    account: state => state.accounts[state.accountId],
     deleting: state => state.deleting,
     getingPassword: state => state.getingPassword
   }

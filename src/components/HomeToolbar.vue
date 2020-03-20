@@ -1,5 +1,5 @@
 <template>
-  <v-toolbar max-height="48" color="elevation-0">
+  <v-toolbar max-height="56">
     <v-menu>
       <template v-slot:activator="{ on }">
         <v-btn icon v-on="on">

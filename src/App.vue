@@ -9,15 +9,19 @@
         Close
       </v-btn>
     </v-snackbar>
+    <Dialog></Dialog>
   </v-app>
 </template>
 
 <script>
 import { mapState } from 'vuex'
+import Dialog from '@/components/Dialog.vue'
 export default {
   name: 'App',
 
-  components: {},
+  components: {
+    Dialog
+  },
 
   data: () => ({}),
   computed: {

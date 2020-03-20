@@ -9,6 +9,8 @@ import Settings from './settings'
 import AddAccount from './addAccount'
 import ForgotPassword from './forgotPassword'
 import ResetPassword from './resetPassword'
+import Dialog from './dialog'
+import SingleAccountDialog from './singleAccountDialog'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -52,6 +54,14 @@ export default new Vuex.Store({
     resetPassword: {
       namespaced: true,
       ...ResetPassword
+    },
+    dialog: {
+      namespaced: true,
+      ...Dialog
+    },
+    singleAccountDialog: {
+      namespaced: true,
+      ...SingleAccountDialog
     }
   }
 })
