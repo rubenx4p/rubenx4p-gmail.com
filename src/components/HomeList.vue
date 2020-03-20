@@ -3,13 +3,9 @@
     <div v-for="item in items" :key="item.id">
       <HomeListItem
         :item="item"
-        :selected="selected"
-        :deleting="deleting"
-        :getingPassword="getingPassword"
-        @selectItem="$emit('selectItem', $event)"
-        @deleteItem="$emit('deleteItem', $event)"
-        @getPassword="$emit('getPassword', $event)"
         @copy="$emit('copy', $event)"
+        @deleteAccountDialog="$emit('deleteAccountDialog', $event)"
+        @unlockAccountDialog="$emit('unlockAccountDialog', $event)"
       />
       <v-divider></v-divider>
     </div>
@@ -33,18 +29,6 @@ export default {
     items: {
       type: Array,
       default: () => []
-    },
-    selected: {
-      type: Object,
-      default: undefined
-    },
-    deleting: {
-      type: Boolean,
-      default: false
-    },
-    getingPassword: {
-      type: Boolean,
-      default: false
     }
   },
   methods: {},

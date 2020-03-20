@@ -3,13 +3,9 @@
     <HomeToolbar :search="search" @input="setSearch($event)" />
     <HomeList
       :items="accounts"
-      :selected="account"
-      :deleting="deleting"
-      :getingPassword="getingPassword"
-      @selectItem="selectAccount($event)"
-      @deleteItem="deleteAccount($event)"
-      @getPassword="getPassword"
       @copy="copy"
+      @deleteAccountDialog="openDialog({ dialogName: 'deleteAccountDialog', account: $event })"
+      @unlockAccountDialog="openDialog({ dialogName: 'unlockAccountDialog', account: $event })"
     />
   </div>
 </template>
@@ -30,11 +26,12 @@ export default {
     this.$store.dispatch('home/getAccounts')
   },
   methods: {
-    ...mapActions('home', ['deleteAccount', 'getPassword', 'copy']),
-    ...mapMutations('home', ['setSearch', 'selectAccount', 'resetState'])
+    ...mapActions('home', ['copy']),
+    ...mapActions('dialog', ['openDialog']),
+    ...mapMutations('home', ['setSearch', 'resetState'])
   },
   computed: {
-    ...mapGetters('home', ['accounts', 'search', 'account', 'deleting', 'getingPassword'])
+    ...mapGetters('home', ['accounts', 'search'])
   },
   destroyed() {
     this.resetState()

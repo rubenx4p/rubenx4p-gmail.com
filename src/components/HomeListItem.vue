@@ -1,38 +1,44 @@
 <template>
-  <div :class="{ selected: selected === item }">
-    <v-list-item @click="$emit('selectItem', item)">
+  <div class="item-wrapper d-flex">
+    <!-- <v-list-item-action>
+      <v-checkbox></v-checkbox>
+    </v-list-item-action> -->
+    <v-list-item class="account-info">
       <v-list-item-content>
         <v-list-item-title>Account: {{ item.accountName }}</v-list-item-title>
         <v-list-item-title>Username: {{ item.username }}</v-list-item-title>
-        <v-list-item-title v-if="!(selected === item && !item.password)" :class="item.password ? 'password' : ''"
-          >Passwrod: {{ !!item.password ? item.password : 'Unavailable' }}</v-list-item-title
-        >
+        <v-list-item-title
+          >Password:
+          <v-tooltip top v-show="!!item.password">
+            <template v-slot:activator="{ on }">
+              <span v-on="on" class="unlocked" @click="copy">{{ item.password }}</span>
+            </template>
+            <span>{{ item.password }}</span>
+          </v-tooltip>
+
+          <span class="locked" v-show="!item.password">Locked</span>
+        </v-list-item-title>
       </v-list-item-content>
     </v-list-item>
-    <v-list-item class="d-flex flex-column" v-if="selected === item">
-      <v-list-item-title class="align-self-stretch">
-        <v-text-field
-          v-model="key"
-          :error-messages="keyErrors"
-          :append-icon="showKey ? 'mdi-eye' : 'mdi-eye-off'"
-          required
-          :type="showKey ? 'text' : 'password'"
-          label="Enter your key"
-          @click:append="showKey = !showKey"
-          @input="$v.key.$touch()"
-          @blur="$v.key.$touch()"
-        ></v-text-field>
-      </v-list-item-title>
-      <v-list-item-action class="d-flex flex-row">
-        <v-btn v-show="!item.password" class="" color="primary" @click="tryToGetPassword" :loading="getingPassword"
-          >get password</v-btn
-        >
-        <v-btn class="mx-2" color="error" @click="tryToDeleteItem" :loading="deleting">delete</v-btn>
-        <v-btn v-show="item.password" @click="copy" class="mx-2" fab small color="primary" title="copy to clipboard">
-          <v-icon dark>mdi-content-copy</v-icon>
+    <v-menu>
+      <template v-slot:activator="{ on }">
+        <v-btn icon v-on="on" class="align-self-center">
+          <v-icon>mdi-chevron-down</v-icon>
         </v-btn>
-      </v-list-item-action>
-    </v-list-item>
+      </template>
+
+      <v-list>
+        <v-list-item v-show="!item.password" @click="$emit('unlockAccountDialog', item)">
+          <v-list-item-title>Unlock</v-list-item-title>
+        </v-list-item>
+        <v-list-item @click="$emit('deleteAccountDialog', item)">
+          <v-list-item-title>Delete</v-list-item-title>
+        </v-list-item>
+        <v-list-item @click="copy" v-show="item.password">
+          <v-list-item-title>Copy to clipboard</v-list-item-title>
+        </v-list-item>
+      </v-list>
+    </v-menu>
   </div>
 </template>
 
@@ -58,18 +64,6 @@ export default {
     item: {
       type: Object,
       default: () => null
-    },
-    selected: {
-      type: Object,
-      default: undefined
-    },
-    deleting: {
-      type: Boolean,
-      default: false
-    },
-    getingPassword: {
-      type: Boolean,
-      default: false
     }
   },
   methods: {
@@ -77,18 +71,7 @@ export default {
       this.$v.$touch()
       return !this.$v.$error
     },
-    tryToDeleteItem() {
-      if (this.valid()) {
-        const { selected, key } = this
-        this.$emit('deleteItem', { account: selected, key: key })
-      }
-    },
-    tryToGetPassword() {
-      if (this.valid()) {
-        const { selected, key } = this
-        this.$emit('getPassword', { account: selected, key: key })
-      }
-    },
+    edit() {},
     copy() {
       this.$emit('copy', this.item.password)
     }
@@ -105,10 +88,26 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.selected {
-  background-color: lightyellow;
+.item-wrapper {
+  padding-inline-start: 12px;
 }
-.password {
-  color: green;
+.v-list-item__action {
+  margin-right: 0px !important;
+}
+.v-list-item__title {
+  white-space: initial;
+}
+.account-info {
+  overflow: hidden;
+
+  .unlocked {
+    color: green;
+    cursor: pointer;
+    font-weight: bolder;
+    text-decoration: underline;
+  }
+  .locked {
+    color: red;
+  }
 }
 </style>
