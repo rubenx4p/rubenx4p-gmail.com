@@ -6,6 +6,8 @@
         @copy="$emit('copy', $event)"
         @deleteAccountDialog="$emit('deleteAccountDialog', $event)"
         @unlockAccountDialog="$emit('unlockAccountDialog', $event)"
+        @lock="$emit('lock', $event)"
+        @edit="$emit('edit', $event)"
       />
       <v-divider></v-divider>
     </div>

@@ -1,6 +1,7 @@
+import router from '@/router/index'
 import api from '@/api'
 import to from '../utils/to'
-import { fetchStoredPassword, storePassword } from './utils/home'
+import { fetchStoredPassword, storePassword, removePassword } from './utils/home'
 import { exportCSV } from '../utils/csv'
 const getDefaultState = () => {
   return {
@@ -68,6 +69,18 @@ export default {
       }, arrList)
 
       exportCSV(data, 'accounts')
+    },
+    lock({ state, commit }, account) {
+      removePassword(account)
+
+      const accountWithoutPassword = { ...account, password: undefined }
+
+      const accounts = { ...state.accounts, [account.id]: accountWithoutPassword }
+
+      commit('updateAccounts', accounts)
+    },
+    edit(_, account) {
+      router.push(`../add-account/${account.id}`)
     }
   },
   mutations: {
