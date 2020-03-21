@@ -9,13 +9,7 @@
         <v-list-item-title>Username: {{ item.username }}</v-list-item-title>
         <v-list-item-title
           >Password:
-          <v-tooltip top v-show="!!item.password">
-            <template v-slot:activator="{ on }">
-              <span v-on="on" class="unlocked" @click="copy">{{ item.password }}</span>
-            </template>
-            <span>{{ item.password }}</span>
-          </v-tooltip>
-
+          <span class="unlocked" @click="copy">{{ item.password }}</span>
           <span class="locked" v-show="!item.password">Locked</span>
         </v-list-item-title>
       </v-list-item-content>
@@ -30,6 +24,9 @@
       <v-list>
         <v-list-item v-show="!item.password" @click="$emit('unlockAccountDialog', item)">
           <v-list-item-title>Unlock</v-list-item-title>
+        </v-list-item>
+        <v-list-item v-show="item.password" @click="$emit('lock', item)">
+          <v-list-item-title>Lock</v-list-item-title>
         </v-list-item>
         <v-list-item @click="$emit('deleteAccountDialog', item)">
           <v-list-item-title>Delete</v-list-item-title>

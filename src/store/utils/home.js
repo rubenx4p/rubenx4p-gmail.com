@@ -11,7 +11,7 @@ export const fetchStoredPassword = account => {
     } else {
       delete storageAccounts[account.id]
       window.localStorage.setItem('accounts-storage', JSON.stringify(storageAccounts))
-      return null
+      return undefined
     }
   }
 }
@@ -23,6 +23,14 @@ export const storePassword = account => {
     start: moment().format(),
     password: account.password
   }
+
+  window.localStorage.setItem('accounts-storage', JSON.stringify(storageAccounts))
+}
+
+export const removePassword = account => {
+  const storageAccounts = JSON.parse(window.localStorage.getItem('accounts-storage')) || {}
+
+  delete storageAccounts[account.id]
 
   window.localStorage.setItem('accounts-storage', JSON.stringify(storageAccounts))
 }

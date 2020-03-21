@@ -6,6 +6,7 @@
       @copy="copy"
       @deleteAccountDialog="openDialog({ dialogName: 'deleteAccountDialog', account: $event })"
       @unlockAccountDialog="openDialog({ dialogName: 'unlockAccountDialog', account: $event })"
+      @lock="lock({ account: $event })"
     />
   </div>
 </template>
@@ -26,7 +27,7 @@ export default {
     this.$store.dispatch('home/getAccounts')
   },
   methods: {
-    ...mapActions('home', ['copy']),
+    ...mapActions('home', ['copy', 'lock']),
     ...mapActions('dialog', ['openDialog']),
     ...mapMutations('home', ['setSearch', 'resetState'])
   },
