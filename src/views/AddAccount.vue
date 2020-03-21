@@ -9,13 +9,13 @@
       <v-row justify="center">
         <v-col class="col-sm-5">
           <v-text-field
-            v-model="name"
+            v-model="accountName"
             :error-messages="nameErrors"
             required
             type="text"
             label="Name"
-            @input="$v.name.$touch()"
-            @blur="$v.name.$touch()"
+            @input="$v.accountName.$touch()"
+            @blur="$v.accountName.$touch()"
           ></v-text-field>
         </v-col>
       </v-row>
@@ -66,7 +66,8 @@
       </v-row>
       <v-row justify="center">
         <v-col class="col-sm-5">
-          <v-btn @click="addAccount" :loading="fetching" color="primary">add account</v-btn>
+          <v-btn @click="addAccount" v-show="!id" :loading="loading" color="primary">add account</v-btn>
+          <v-btn @click="save" v-show="!!id" :loading="loading" color="primary">save</v-btn>
         </v-col>
       </v-row>
     </v-container>
@@ -74,7 +75,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import { required } from 'vuelidate/lib/validators'
 import { validationMixin } from 'vuelidate'
 import { generatePassword } from '@/utils/index'
@@ -83,7 +84,7 @@ export default {
   name: 'AddAccount',
   mixins: [validationMixin],
   validations: {
-    name: {
+    accountName: {
       required
     },
     username: {
@@ -96,9 +97,6 @@ export default {
       required
     }
   },
-  created() {
-    this.$store.commit('addAccount/resetState')
-  },
   methods: {
     addAccount() {
       this.$v.$touch()
@@ -106,15 +104,21 @@ export default {
         this.$store.dispatch('addAccount/tryAddAccount')
       }
     },
+    save() {
+      this.$v.$touch()
+      if (!this.$v.$error) {
+        this.$store.dispatch('addAccount/trySave')
+      }
+    },
     generate() {
       this.password = generatePassword()
     }
   },
   computed: {
-    ...mapState('addAccount', ['fetching']),
-    name: {
+    ...mapState('addAccount', ['loading', 'id']),
+    accountName: {
       get() {
-        return this.$store.state.addAccount.name
+        return this.$store.state.addAccount.accountName
       },
       set(value) {
         this.$store.commit('addAccount/setName', value)
@@ -162,8 +166,8 @@ export default {
     },
     nameErrors() {
       const errors = []
-      if (!this.$v.name.$dirty) return errors
-      !this.$v.name.required && errors.push('Name is required')
+      if (!this.$v.accountName.$dirty) return errors
+      !this.$v.accountName.required && errors.push('Name is required')
       return errors
     },
     usernameErrors() {
@@ -183,6 +187,18 @@ export default {
       if (!this.$v.key.$dirty) return errors
       !this.$v.key.required && errors.push('Key is required')
       return errors
+    }
+  },
+  watch: {
+    '$route.params.id': {
+      handler: function(id) {
+        this.$store.commit('addAccount/resetState')
+
+        if (id) {
+          this.$store.dispatch('addAccount/getAccountData', id)
+        }
+      },
+      immediate: true
     }
   }
 }

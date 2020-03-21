@@ -28,11 +28,14 @@
         <v-list-item v-show="item.password" @click="$emit('lock', item)">
           <v-list-item-title>Lock</v-list-item-title>
         </v-list-item>
+        <v-list-item @click="$emit('edit', item)">
+          <v-list-item-title>Edit</v-list-item-title>
+        </v-list-item>
         <v-list-item @click="$emit('deleteAccountDialog', item)">
           <v-list-item-title>Delete</v-list-item-title>
         </v-list-item>
         <v-list-item @click="copy" v-show="item.password">
-          <v-list-item-title>Copy to clipboard</v-list-item-title>
+          <v-list-item-title>Copy</v-list-item-title>
         </v-list-item>
       </v-list>
     </v-menu>
