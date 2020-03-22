@@ -16,7 +16,7 @@
     </v-list-item>
     <v-menu>
       <template v-slot:activator="{ on }">
-        <v-btn icon v-on="on" class="align-self-center">
+        <v-btn icon x-large v-on="on" class="align-self-center">
           <v-icon>mdi-chevron-down</v-icon>
         </v-btn>
       </template>

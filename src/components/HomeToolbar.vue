@@ -2,7 +2,7 @@
   <v-toolbar max-height="56">
     <v-menu>
       <template v-slot:activator="{ on }">
-        <v-btn icon v-on="on">
+        <v-btn icon x-large v-on="on">
           <v-icon>mdi-dots-vertical</v-icon>
         </v-btn>
       </template>

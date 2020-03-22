@@ -1,7 +1,7 @@
 <template>
   <v-form>
-    <v-toolbar max-height="48" color="primary" dark>
-      <v-btn icon to="/home">
+    <v-toolbar color="primary" dark>
+      <v-btn icon x-large to="/home">
         <v-icon>mdi-arrow-left</v-icon>
       </v-btn>
     </v-toolbar>
@@ -75,7 +75,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState } from 'vuex'
 import { required } from 'vuelidate/lib/validators'
 import { validationMixin } from 'vuelidate'
 import { generatePassword } from '@/utils/index'
