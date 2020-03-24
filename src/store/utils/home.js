@@ -1,12 +1,25 @@
-import moment from 'moment'
+import dayjs from 'dayjs'
+
+export const updateStoredPassword = () => {
+  const storageAccounts = JSON.parse(window.localStorage.getItem('accounts-storage')) || {}
+
+  const newStorageAccounts = Object.entries(storageAccounts).reduce((acc, [key, value]) => {
+    const { start } = value
+    if (dayjs(start).add('30', 'minutes') > dayjs()) {
+      acc[key] = value
+    }
+    return acc
+  }, {})
+  window.localStorage.setItem('accounts-storage', JSON.stringify(newStorageAccounts))
+}
 
 export const fetchStoredPassword = account => {
   const storageAccounts = JSON.parse(window.localStorage.getItem('accounts-storage')) || {}
 
   const storageAccount = storageAccounts[account.id]
   if (storageAccount) {
-    const start = moment(storageAccount.start)
-    if (moment(start).add('30', 'minutes') > moment()) {
+    const start = dayjs(storageAccount.start)
+    if (dayjs(start).add('30', 'minutes') > dayjs()) {
       return storageAccount.password
     } else {
       delete storageAccounts[account.id]
@@ -20,7 +33,7 @@ export const storePassword = account => {
   const storageAccounts = JSON.parse(window.localStorage.getItem('accounts-storage')) || {}
 
   storageAccounts[account.id] = {
-    start: moment().format(),
+    start: dayjs().format(),
     password: account.password
   }
 

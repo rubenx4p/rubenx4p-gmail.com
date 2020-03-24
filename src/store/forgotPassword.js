@@ -1,4 +1,3 @@
-import router from '@/router/index'
 import api from '@/api'
 import to from '@/utils/to'
 
@@ -12,7 +11,7 @@ const getDefaultState = () => {
 export default {
   state: getDefaultState(),
   actions: {
-    async resetPassword({ commit, state, dispatch }, email) {
+    async resetPassword({ commit, dispatch }, email) {
       commit('fetching')
       const [ok, err] = await to(api.post('users/forgot-password', { email }))
       commit('stopFetching')

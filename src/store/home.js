@@ -1,7 +1,7 @@
 import router from '@/router/index'
 import api from '@/api'
 import to from '../utils/to'
-import { fetchStoredPassword, storePassword, removePassword } from './utils/home'
+import { updateStoredPassword, fetchStoredPassword, storePassword, removePassword } from './utils/home'
 import { exportCSV } from '../utils/csv'
 const getDefaultState = () => {
   return {
@@ -13,6 +13,8 @@ export default {
   state: getDefaultState(),
   actions: {
     async getAccounts({ commit, dispatch }) {
+      updateStoredPassword()
+
       const [data, err] = await to(api.get('accounts'))
 
       if (err) {

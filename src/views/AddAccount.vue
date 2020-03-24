@@ -12,6 +12,7 @@
             v-model="accountName"
             :error-messages="nameErrors"
             required
+            autofocus
             type="text"
             label="Name"
             @input="$v.accountName.$touch()"
