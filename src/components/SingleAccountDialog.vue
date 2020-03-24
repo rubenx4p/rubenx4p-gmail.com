@@ -31,6 +31,7 @@
                 <v-list-item-title>Key</v-list-item-title>
                 <v-text-field
                   v-model="key"
+                  autofocus
                   :error-messages="keyErrors"
                   :append-icon="showKey ? 'mdi-eye' : 'mdi-eye-off'"
                   required
