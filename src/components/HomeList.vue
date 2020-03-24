@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import HomeListItem from './HomeListItem'
+const HomeListItem = () => import('./HomeListItem.vue')
 export default {
   name: 'HomeToolbar',
   components: {
