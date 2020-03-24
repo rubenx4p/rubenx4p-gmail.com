@@ -6,7 +6,7 @@
 
 <script>
 import { mapState } from 'vuex'
-import SingleAccountDialog from './SingleAccountDialog'
+const SingleAccountDialog = () => import('./SingleAccountDialog.vue')
 export default {
   name: 'Dialog',
   components: {

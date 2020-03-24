@@ -16,8 +16,8 @@
 import { mapGetters, mapActions } from 'vuex'
 import { mapMutations } from 'vuex'
 
-import HomeToolbar from '@/components/HomeToolbar.vue'
-import HomeList from '@/components/HomeList.vue'
+const HomeToolbar = () => import('@/components/HomeToolbar.vue')
+const HomeList = () => import('@/components/HomeList.vue')
 export default {
   name: 'home',
   components: {

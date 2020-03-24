@@ -15,7 +15,7 @@
 
 <script>
 import { mapState } from 'vuex'
-import Dialog from '@/components/Dialog.vue'
+const Dialog = () => import('@/components/Dialog.vue')
 export default {
   name: 'App',
 
