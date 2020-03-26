@@ -106,7 +106,11 @@ export default {
       if (!state.search) {
         return accounts
       }
-      return accounts.filter(account => account.accountName.toLowerCase().includes(state.search.toLowerCase()))
+      return accounts.filter(
+        account =>
+          account.accountName.toLowerCase().includes(state.search.toLowerCase()) ||
+          account.username.toLowerCase().includes(state.search.toLowerCase())
+      )
     },
     search: state => state.search,
     deleting: state => state.deleting,
