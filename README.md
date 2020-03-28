@@ -27,3 +27,11 @@ npm run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+
+### Environment Variables to run localy
+```
+VUE_APP_BASE_URL=http://localhost:3000/api/
+```
+
+Need to also a second repository - password-manager-server
