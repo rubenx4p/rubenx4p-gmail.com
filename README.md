@@ -1,4 +1,4 @@
-# account-manager-ui
+# password-manager-ui
 
 ## Project setup
 ```
@@ -34,4 +34,5 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 VUE_APP_BASE_URL=http://localhost:3000/api/
 ```
 
-Need to also a second repository - password-manager-server
+### Pre conditions
+Need to clone another repository - password-manager-server
