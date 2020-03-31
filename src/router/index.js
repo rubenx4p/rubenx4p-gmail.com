@@ -57,7 +57,8 @@ const routes = [
   {
     path: '/add-account/:id',
     name: 'edit-account',
-    component: () => import(/* webpackChunkName: "addAccount" */ '../views/AddAccount.vue')
+    component: () => import(/* webpackChunkName: "addAccount" */ '../views/AddAccount.vue'),
+    beforeEnter: ifAuthenticated
   },
   {
     path: '/reset-password/:token',

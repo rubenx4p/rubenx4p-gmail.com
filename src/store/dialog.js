@@ -15,6 +15,10 @@ export default {
           dispatch('singleAccountDialog/initState', { account, mode: SingleAccountDialogModes.UNLOCK }, { root: true })
         }
       }
+    },
+    closeAllDialogs({ commit }) {
+      // add here all dialogs
+      commit('singleAccountDialog/resetState', null, { root: true })
     }
   },
   mutations: {
