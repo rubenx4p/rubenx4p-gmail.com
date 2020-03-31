@@ -14,11 +14,12 @@ export default {
       localStorage.setItem('token', token)
       router.push('/home')
     },
-    logout({ commit }) {
+    logout({ commit, dispatch }) {
       localStorage.removeItem('token')
       localStorage.removeItem('accounts-storage')
+      dispatch('dialog/closeAllDialogs', null, { root: true })
       commit('removeToken')
-      router.push('/login')
+      router.replace('../login')
     }
   },
   mutations: {

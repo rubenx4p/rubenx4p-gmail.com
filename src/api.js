@@ -1,4 +1,5 @@
 import axios from 'axios'
+import store from '@/store/index'
 
 const api = axios.create({
   baseURL: process.env.VUE_APP_BASE_URL,
@@ -27,6 +28,9 @@ api.interceptors.response.use(
     return response.data
   },
   err => {
+    if (err.response.status === 401) {
+      store.dispatch('auth/logout')
+    }
     return Promise.reject(err.response.data)
   }
 )
