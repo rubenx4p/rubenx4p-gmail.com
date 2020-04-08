@@ -1,20 +1,19 @@
 import router from '@/router/index'
 import api from '@/api'
 import to from '../utils/to'
-import { updateStoredPassword, fetchStoredPassword, storePassword, removePassword } from './utils/home'
+import { storePassword, removePassword, accountsStorageJob } from './utils/home'
 import { exportCSV } from '../utils/csv'
 const getDefaultState = () => {
   return {
     accounts: {},
-    search: ''
+    search: '',
+    intervalId: null
   }
 }
 export default {
   state: getDefaultState(),
   actions: {
     async getAccounts({ commit, dispatch }) {
-      updateStoredPassword()
-
       const [data, err] = await to(api.get('accounts'))
 
       if (err) {
@@ -23,20 +22,9 @@ export default {
 
       const { accounts } = data
 
-      const accountsObject = accounts.reduce((acc, curr) => {
-        const account = {
-          id: curr._id,
-          accountName: curr.name,
-          username: curr.username
-        }
+      const intervalId = accountsStorageJob(accounts, commit)
 
-        account.password = fetchStoredPassword(account)
-
-        acc[account.id] = account
-        return acc
-      }, {})
-
-      commit('receiveAccounts', accountsObject)
+      commit('receiveIntervalId', intervalId)
     },
     deleteAccount({ commit, state }, { id }) {
       const accounts = { ...state.accounts }
@@ -89,10 +77,19 @@ export default {
     receiveAccounts(state, accounts) {
       state.accounts = accounts
     },
+    receiveIntervalId(state, intervalId) {
+      state.intervalId = intervalId
+    },
     setSearch(state, search) {
       state.search = search
     },
     resetState(state) {
+      const { intervalId } = state
+
+      if (intervalId) {
+        clearInterval(intervalId)
+      }
+
       Object.assign(state, getDefaultState())
     },
 
