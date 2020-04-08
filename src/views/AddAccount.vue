@@ -1,7 +1,7 @@
 <template>
   <v-form>
     <v-toolbar color="primary" dark>
-      <v-btn icon x-large to="/home">
+      <v-btn icon large to="/home">
         <v-icon>mdi-arrow-left</v-icon>
       </v-btn>
     </v-toolbar>

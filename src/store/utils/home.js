@@ -18,15 +18,9 @@ export const fetchStoredPassword = account => {
 
   const storageAccount = storageAccounts[account.id]
   if (storageAccount) {
-    const start = dayjs(storageAccount.start)
-    if (dayjs(start).add('30', 'minutes') > dayjs()) {
-      return storageAccount.password
-    } else {
-      delete storageAccounts[account.id]
-      window.localStorage.setItem('accounts-storage', JSON.stringify(storageAccounts))
-      return undefined
-    }
+    return storageAccount.password
   }
+  return undefined
 }
 
 export const storePassword = account => {
@@ -46,4 +40,35 @@ export const removePassword = account => {
   delete storageAccounts[account.id]
 
   window.localStorage.setItem('accounts-storage', JSON.stringify(storageAccounts))
+}
+
+export const fetchManyStoredPassword = accounts => {
+  const accountsObject = accounts.reduce((acc, curr) => {
+    const account = {
+      id: curr._id,
+      accountName: curr.name,
+      username: curr.username
+    }
+
+    account.password = fetchStoredPassword(account)
+
+    acc[account.id] = account
+    return acc
+  }, {})
+
+  return accountsObject
+}
+
+export const updateStorageAndState = (accounts, commit) => {
+  updateStoredPassword()
+  const accountsObject = fetchManyStoredPassword(accounts)
+  commit('receiveAccounts', accountsObject)
+}
+export const accountsStorageJob = (accounts, commit) => {
+  updateStorageAndState(accounts, commit)
+  const intervalId = setInterval(() => {
+    updateStorageAndState(accounts, commit)
+  }, 5000)
+
+  return intervalId
 }
