@@ -3,6 +3,11 @@
     <v-container fluid>
       <v-row justify="center">
         <v-col class="col-sm-5">
+          <img class="symbol" src="@/assets/logo-long-2.png" />
+        </v-col>
+      </v-row>
+      <v-row justify="center">
+        <v-col class="col-sm-5">
           <v-text-field
             v-model="name"
             :error-messages="nameErrors"
@@ -189,3 +194,9 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.symbol {
+  width: 100%;
+}
+</style>

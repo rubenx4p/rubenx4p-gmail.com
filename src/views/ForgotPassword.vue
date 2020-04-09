@@ -3,7 +3,12 @@
     <v-container fluid>
       <v-row justify="center">
         <v-col class="col-sm-5">
-          <div class="headline">Forgot your password?</div>
+          <img class="symbol" src="@/assets/symbol.png" />
+        </v-col>
+      </v-row>
+      <v-row justify="center">
+        <v-col class="col-sm-5">
+          <div class="headline onBackground--text">Forgot your password?</div>
         </v-col>
       </v-row>
       <v-row justify="center">
@@ -78,3 +83,9 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.symbol {
+  width: 100%;
+}
+</style>

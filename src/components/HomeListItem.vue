@@ -7,10 +7,10 @@
       <v-list-item-content>
         <v-list-item-title>Account: {{ item.accountName }}</v-list-item-title>
         <v-list-item-title>Username: {{ item.username }}</v-list-item-title>
-        <v-list-item-title
+        <v-list-item-title v-show="item.password"
           >Password:
           <span class="unlocked" @click="copy">{{ item.password }}</span>
-          <span class="locked" v-show="!item.password">Locked</span>
+          <!-- <span class="locked" v-show="!item.password">Locked</span> -->
         </v-list-item-title>
       </v-list-item-content>
     </v-list-item>
