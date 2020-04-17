@@ -36,19 +36,20 @@ export default {
     async trySave({ commit, state, dispatch }) {
       const { accountName, username, password, key, id } = state
 
+      commit('loading', true)
+      const [data, err] = await to(api.patch(`accounts/${id}`, { name: accountName, username, password, key }))
+      commit('loading', false)
+
+      if (err) {
+        return dispatch('snackbar/snackbar', { msg: err.msg }, { root: true })
+      }
+
       const account = {
         name: accountName,
         username,
         password,
         key,
         id
-      }
-      commit('loading', true)
-      const [data, err] = await to(api.patch(`accounts/${id}`, account))
-      commit('loading', false)
-
-      if (err) {
-        return dispatch('snackbar/snackbar', { msg: err.msg }, { root: true })
       }
 
       removePassword(account)
