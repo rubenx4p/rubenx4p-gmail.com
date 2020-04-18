@@ -44,11 +44,7 @@ export const removePassword = account => {
 
 export const fetchManyStoredPassword = accounts => {
   const accountsObject = accounts.reduce((acc, curr) => {
-    const account = {
-      id: curr._id,
-      accountName: curr.name,
-      username: curr.username
-    }
+    const account = { ...curr }
 
     account.password = fetchStoredPassword(account)
 
@@ -64,11 +60,24 @@ export const updateStorageAndState = (accounts, commit) => {
   const accountsObject = fetchManyStoredPassword(accounts)
   commit('receiveAccounts', accountsObject)
 }
-export const accountsStorageJob = (accounts, commit) => {
+export const accountsStorageJob = (accounts, commit, state) => {
   updateStorageAndState(accounts, commit)
   const intervalId = setInterval(() => {
-    updateStorageAndState(accounts, commit)
+    const accountList = Object.values(state.accounts)
+    updateStorageAndState(accountList, commit)
   }, 5000)
 
   return intervalId
+}
+
+export const deleteAccuontFromStorage = id => {
+  const storageAccounts = JSON.parse(window.localStorage.getItem('accounts-storage')) || {}
+
+  const newStorageAccounts = Object.entries(storageAccounts).reduce((acc, [key, value]) => {
+    if (key !== id) {
+      acc[key] = value
+    }
+    return acc
+  }, {})
+  window.localStorage.setItem('accounts-storage', JSON.stringify(newStorageAccounts))
 }
