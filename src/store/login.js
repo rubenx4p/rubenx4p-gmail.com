@@ -20,7 +20,7 @@ export default {
       commit('stopFetching')
 
       if (err) {
-        dispatch('snackbar/snackbar', { msg: err.msg }, { root: true })
+        return dispatch('snackbar/snackbar', { msg: err.msg }, { root: true })
       }
 
       const { token } = res

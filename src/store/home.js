@@ -1,7 +1,7 @@
 import router from '@/router/index'
 import api from '@/api'
 import to from '../utils/to'
-import { storePassword, removePassword, accountsStorageJob } from './utils/home'
+import { storePassword, removePassword, accountsStorageJob, deleteAccuontFromStorage } from './utils/home'
 import { exportCSV } from '../utils/csv'
 const getDefaultState = () => {
   return {
@@ -13,22 +13,28 @@ const getDefaultState = () => {
 export default {
   state: getDefaultState(),
   actions: {
-    async getAccounts({ commit, dispatch }) {
+    async getAccounts({ state, commit, dispatch }) {
       const [data, err] = await to(api.get('accounts'))
 
       if (err) {
         dispatch('snackbar/snackbar', { msg: err.msg }, { root: true })
       }
 
-      const { accounts } = data
+      const accounts = data.accounts.map(account => ({
+        id: account._id,
+        accountName: account.name,
+        username: account.username
+      }))
 
-      const intervalId = accountsStorageJob(accounts, commit)
+      const intervalId = accountsStorageJob(accounts, commit, state)
 
       commit('receiveIntervalId', intervalId)
     },
     deleteAccount({ commit, state }, { id }) {
       const accounts = { ...state.accounts }
       delete accounts[id]
+
+      deleteAccuontFromStorage(id)
 
       commit('updateAccounts', accounts)
     },
@@ -75,7 +81,7 @@ export default {
   },
   mutations: {
     receiveAccounts(state, accounts) {
-      state.accounts = accounts
+      state.accounts = { ...accounts }
     },
     receiveIntervalId(state, intervalId) {
       state.intervalId = intervalId
