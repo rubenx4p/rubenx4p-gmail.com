@@ -38,6 +38,7 @@
                   :type="showKey ? 'text' : 'password'"
                   label="Enter your key"
                   @click:append="showKey = !showKey"
+                  @keyup.enter="tryActionOnAccount"
                   @input="$v.key.$touch()"
                   @blur="$v.key.$touch()"
                 ></v-text-field>
