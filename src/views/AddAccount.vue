@@ -60,6 +60,7 @@
             :type="showKey ? 'text' : 'password'"
             label="Key"
             @click:append="showKey = !showKey"
+            @keyup.enter="!id ? addAccount() : save()"
             @input="$v.key.$touch()"
             @blur="$v.key.$touch()"
           ></v-text-field>
