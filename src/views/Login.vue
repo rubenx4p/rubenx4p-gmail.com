@@ -31,6 +31,7 @@
             @click:append="showPassword = !showPassword"
             @input="$v.password.$touch()"
             @blur="$v.password.$touch()"
+            @keyup.enter="login"
           ></v-text-field>
         </v-col>
       </v-row>

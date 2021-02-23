@@ -13,6 +13,11 @@ export default {
         }
         case 'unlockAccountDialog': {
           dispatch('singleAccountDialog/initState', { account, mode: SingleAccountDialogModes.UNLOCK }, { root: true })
+          break
+        }
+        case 'unlockAllAccountsDialog': {
+          dispatch('unlockAllAccountsDialog/initState', null, { root: true })
+          break
         }
       }
     },

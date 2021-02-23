@@ -49,6 +49,17 @@ export default {
 
       commit('updateAccounts', accounts)
     },
+    receiveAllAccountPassword({ commit, state }, payload) {
+      const accounts = Object.values(state.accounts).reduce((acc, { id, ...rest }) => {
+        const account = { ...rest, ...payload[id] }
+        acc[id] = account
+
+        storePassword(account)
+        return acc
+      }, {})
+
+      commit('updateAccounts', accounts)
+    },
     copy({ dispatch }, password) {
       window.navigator.clipboard.writeText(password)
       return dispatch('snackbar/snackbar', { msg: `${password} copied to the clipboard` }, { root: true })

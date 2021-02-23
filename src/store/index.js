@@ -11,6 +11,7 @@ import ForgotPassword from './forgotPassword'
 import ResetPassword from './resetPassword'
 import Dialog from './dialog'
 import SingleAccountDialog from './singleAccountDialog'
+import UnlockAllAccountsDialog from './unlockAllAccountsDialog'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -62,6 +63,10 @@ export default new Vuex.Store({
     singleAccountDialog: {
       namespaced: true,
       ...SingleAccountDialog
+    },
+    unlockAllAccountsDialog: {
+      namespaced: true,
+      ...UnlockAllAccountsDialog
     }
   }
 })

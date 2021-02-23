@@ -1,16 +1,19 @@
 <template>
   <div>
     <SingleAccountDialog :fullscreen="fullscreen" />
+    <UnlockAllAccountsDialog :fullscreen="fullscreen" />
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
 const SingleAccountDialog = () => import('./SingleAccountDialog.vue')
+const UnlockAllAccountsDialog = () => import('./UnlockAllAccountsDialog.vue')
 export default {
   name: 'Dialog',
   components: {
-    SingleAccountDialog
+    SingleAccountDialog,
+    UnlockAllAccountsDialog
   },
   created() {
     this.fullscreen = document.body.clientWidth < 600 ? true : false

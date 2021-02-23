@@ -11,6 +11,9 @@
         <v-list-item @click="exportCSV">
           <v-list-item-title>Export to CSV</v-list-item-title>
         </v-list-item>
+        <v-list-item @click="openDialog({ dialogName: 'unlockAllAccountsDialog', account: $event })">
+          <v-list-item-title>Unlock All</v-list-item-title>
+        </v-list-item>
         <v-list-item @click="logout">
           <v-list-item-title>Logout</v-list-item-title>
         </v-list-item>
@@ -33,6 +36,8 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+
 export default {
   name: 'HelloToolbar',
 
@@ -46,11 +51,15 @@ export default {
     }
   },
   methods: {
+    ...mapActions('dialog', ['openDialog']),
     logout() {
       this.$store.dispatch('auth/logout')
     },
     exportCSV() {
       this.$store.dispatch('home/exportCSV')
+    },
+    unlockAll() {
+      this.$store.dispatch('home/unlockAll')
     }
   },
   computed: {}
