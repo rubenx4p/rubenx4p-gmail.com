@@ -113,7 +113,7 @@ export default {
       }
     },
     generate() {
-      this.password = generatePassword()
+      this.password = generatePassword();
     }
   },
   computed: {

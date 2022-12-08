@@ -4,12 +4,41 @@ export const getRandomInt = (min, max) => {
   return Math.floor(Math.random() * (max - min)) + min //The maximum is exclusive and the minimum is inclusive
 }
 
-export const generatePassword = (min = 12, max = 12) => {
-  var length = getRandomInt(min, max),
-    charset = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()',
-    retVal = ''
-  for (var i = 0, n = charset.length; i < length; ++i) {
-    retVal += charset.charAt(Math.floor(Math.random() * n))
+export const generatePassword = () => {
+  const lowercaseChars = "abcdefghijklmnopqrstuvwxyz";
+  const uppercaseChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  const numberChars = "0123456789";
+  const specialChars = "!@#$%^&*()_+-=";
+  const allowedChars = lowercaseChars + uppercaseChars + numberChars + specialChars;
+
+  let password = "";
+
+  password += getRandomChar(lowercaseChars);
+
+  password += getRandomChar(uppercaseChars);
+
+  password += getRandomChar(numberChars);
+
+  password += getRandomChar(specialChars);
+
+  for (let i = password.length; i < 16; i++) {
+    password += getRandomChar(allowedChars);
   }
-  return retVal
+
+  password = shuffleString(password);
+
+  return password;
 }
+
+function getRandomChar(characters) {
+  return characters.charAt(Math.floor(Math.random() * characters.length));
+}
+
+function shuffleString(string) {
+  for (let i = string.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [string[i], string[j]] = [string[j], string[i]];
+  }
+  return string;
+}
+
