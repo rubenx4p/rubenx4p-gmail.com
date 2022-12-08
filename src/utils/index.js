@@ -35,10 +35,12 @@ function getRandomChar(characters) {
 }
 
 function shuffleString(string) {
+  const chars = string.split('');
   for (let i = string.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
-    [string[i], string[j]] = [string[j], string[i]];
+    [chars[i], chars[j]] = [chars[j], chars[i]];
+
   }
-  return string;
+  return chars.join("");
 }
 
